@@ -7,7 +7,7 @@ I wanted to write a version that still worked in the browser but did not require
 
 I had worked with rust+wasm in 2020 and still remember a horrible experience with node.js packaging. When I discovered the [no bundle version of the wasm-bindgen guide](https://nobundle.github.io/book/examples/wasm-bindgen_guide.html) suddenly writing wasm with rust became fun again.
 
-I adopted the nobundle guide's project layout (except for index.html):
+I adopted the project layout of the nobundle guide (except for index.html, which I moved to the root of the www directory):
 
 <img src="tree.png" />
 
@@ -23,11 +23,10 @@ python -m http.server --directory www 8080
 and point your browser to localhost:8080
 
 ## Development
+
 After working through the nobundle guide [no bundle version of the wasm-bindgen guide](https://nobundle.github.io/book/examples/wasm-bindgen_guide.html), especially examples 1.1, 1.4 and 1.5,
 development was quite easy, except for `form` management, which requires web-sys Closure (partially shown in example 1.7 but with no complete form example).
 
-I plan to write a short tutorial on the subject of forms with rust + wasm.
-
-I found a working example in [https://codeberg.org/teotwaki/rust-wasm-form-validation-tutorial/src/branch/main/wasm/src/lib.rs](https://codeberg.org/teotwaki/rust-wasm-form-validation-tutorial/src/branch/main/wasm/src/lib.rs), which solved the issue for me.
+I found relevant information in [https://sebastian.lauwe.rs/blog/rust-wasm-form-validation/](https://sebastian.lauwe.rs/blog/rust-wasm-form-validation/) as welle as a working example in [https://codeberg.org/teotwaki/rust-wasm-form-validation-tutorial/src/branch/main/wasm/src/lib.rs](https://codeberg.org/teotwaki/rust-wasm-form-validation-tutorial/src/branch/main/wasm/src/lib.rs), which solved the issue for me.
 
 Watch live at [https://eludev.fr/wasmzidian/](https://eludev.fr/wasmzidian/)
