@@ -1,0 +1,29 @@
+[package]
+name = "wasmzidian"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+lazy_static = "1.5.0"
+wasm-bindgen = "0.2.108"
+
+[dependencies.web-sys]
+version = "0.3.65"
+features = [
+  'console',
+  'Event',
+  'Document',
+  'Element',
+  'HtmlElement',
+  "HtmlFormElement", 
+  "HtmlInputElement",
+  'Node',
+  'Window',
+]
+
+[profile.release]
+lto = true
+opt-level = 'z'

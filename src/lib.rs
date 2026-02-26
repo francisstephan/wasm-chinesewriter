@@ -1,0 +1,195 @@
+// src/lib.rs
+mod dbase;
+use wasm_bindgen::prelude::*;
+use web_sys::{Event, HtmlFormElement, HtmlInputElement, console, window};
+
+//This Rust function will be called from Js
+#[wasm_bindgen]
+pub fn getsize() -> usize {
+    dbase::getsize()
+}
+
+#[wasm_bindgen]
+pub fn listdic() -> () {
+    ziprinter("dictionary list", dbase::list())
+}
+
+#[wasm_bindgen]
+pub fn cancel() {
+    let document = window().unwrap().document().unwrap();
+    let cont = document.get_element_by_id("content").unwrap();
+    cont.set_inner_html("Form canceled.");
+}
+
+#[wasm_bindgen]
+pub fn getpyform() -> String {
+    let form = r##"
+        <form id="pyinput">
+		    <label for="pinyin">Pinyin+tone (using pattern ^[a-z,ü]+[0-4]?) :</label>
+		    <input id="pinyin" name="pinyin_ton" type="text" pattern="^[a-z,ü]+[0-4]?" autofocus>
+		    <button class="menubouton" type="submit">Submit</button>
+			<button id="cancel" class="menubouton">Cancel</button>
+	  </form>
+	"##;
+
+    String::from(form)
+}
+
+#[wasm_bindgen]
+pub fn getziform() -> String {
+    let form = r##"
+	  <form id="ziinput">
+		    <label for="carac">Character:</label>
+		    <input id="carac" name="carac" type="text" autofocus required minlength="1" maxlength="1">
+		    <button class="menubouton" type="submit">Submit</button>
+			<button id="cancel" class="menubouton">Cancel</button>
+	  </form>
+	"##;
+    String::from(form)
+}
+
+#[wasm_bindgen]
+pub fn getstrokeform() -> String {
+    let form = r##"
+	  <form id="strokeinput">
+		    <label for="stroke">Number of strokes:</label>
+		    <input id="stroke" name="stroke" type="number"  min="1" max="30">
+		    <button class="menubouton" type="submit">Submit </button>
+			<button id="cancel" class="menubouton">Cancel</button>
+	  </form>
+	"##;
+    String::from(form)
+}
+
+#[wasm_bindgen]
+pub fn connectpyform() -> Result<(), JsValue> {
+    let document = window().unwrap().document().unwrap();
+    let form = document
+        .get_element_by_id("pyinput")
+        .unwrap()
+        .dyn_into::<HtmlFormElement>()?;
+    let form_ref = form.clone();
+    let closure = Closure::<dyn Fn(Event)>::new(move |event: Event| {
+        event.prevent_default(); // stop page reload
+
+        console::log_1(&"in callback closure".into());
+        let input = &form_ref
+            .get_with_name("pinyin_ton")
+            .unwrap()
+            .dyn_into::<HtmlInputElement>()
+            .unwrap();
+        if !input.check_validity() {
+            input.report_validity();
+            return;
+        }
+        // form_ref.submit().unwrap();
+        let binding = input.value();
+        let pinyin = binding.as_str();
+        ziprinter(pinyin, dbase::pylist(pinyin));
+
+        console::log_1(&format!("Pinyin_ton :{}", input.value()).into());
+        console::log_1(&"exiting callback closure".into());
+    });
+
+    form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;
+
+    closure.forget(); // keep closure alive
+
+    Ok(())
+}
+
+#[wasm_bindgen]
+pub fn connectziform() -> Result<(), JsValue> {
+    let document = window().unwrap().document().unwrap();
+    let form = document
+        .get_element_by_id("ziinput")
+        .unwrap()
+        .dyn_into::<HtmlFormElement>()?;
+    let form_ref = form.clone();
+    let closure = Closure::<dyn Fn(Event)>::new(move |event: Event| {
+        event.prevent_default(); // stop page reload
+
+        console::log_1(&"in callback closure".into());
+        let input = &form_ref
+            .get_with_name("carac")
+            .unwrap()
+            .dyn_into::<HtmlInputElement>()
+            .unwrap();
+        if !input.check_validity() {
+            input.report_validity();
+            return;
+        }
+        // form_ref.submit().unwrap();
+        let binding = input.value();
+        let carac = binding.as_str();
+        ziprinter(carac, dbase::zilist(carac));
+
+        console::log_1(&format!("Character :{}", input.value()).into());
+        console::log_1(&"exiting callback closure".into());
+    });
+
+    form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;
+
+    closure.forget(); // keep closure alive
+
+    Ok(())
+}
+
+#[wasm_bindgen]
+pub fn connectstrokeform() -> Result<(), JsValue> {
+    let document = window().unwrap().document().unwrap();
+    let form = document
+        .get_element_by_id("strokeinput")
+        .unwrap()
+        .dyn_into::<HtmlFormElement>()?;
+    let form_ref = form.clone();
+    let closure = Closure::<dyn Fn(Event)>::new(move |event: Event| {
+        event.prevent_default(); // stop page reload
+
+        console::log_1(&"in callback closure".into());
+        let input = &form_ref
+            .get_with_name("stroke")
+            .unwrap()
+            .dyn_into::<HtmlInputElement>()
+            .unwrap();
+        if !input.check_validity() {
+            input.report_validity();
+            return;
+        }
+        // form_ref.submit().unwrap();
+        let binding = input.value();
+        let carac = binding.as_str();
+        console::log_1(&format!("Stroke number :{}", input.value()).into());
+        let nbstroke: i64 = carac.parse().unwrap(); // we already checked numeric validity
+        let mess = format!("Characters with {} strokes", nbstroke);
+        ziprinter(&mess, dbase::strokelist(nbstroke));
+
+        console::log_1(&"exiting callback closure".into());
+    });
+
+    form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;
+
+    closure.forget(); // keep closure alive
+
+    Ok(())
+}
+
+fn ziprinter(query: &str, vec: Vec<dbase::Zi>) {
+    let document = window().unwrap().document().unwrap();
+    let mut print: String;
+    let cont = document.get_element_by_id("content").unwrap();
+
+    if vec.len() == 0 {
+        cont.set_inner_html(&format!("No result for query {}", query));
+    } else {
+        print = format!("Result for query \"{}\" :<br />", query);
+        print.push_str("<table><tr><td>Strokes</td><td>Pinyin</td><td>Unicode</td><td>Character</td><td>Translation</td></tr>");
+        for zi in vec {
+            print.push_str(&format!(
+                "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td>",
+                zi.strokes, zi.pinyin_ton, zi.unicode, zi.hanzi, zi.sens,
+            ));
+        }
+        cont.set_inner_html(&print);
+    }
+}

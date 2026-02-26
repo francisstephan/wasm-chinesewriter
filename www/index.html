@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Counter nobundle</title>
+    <link rel="shortcut icon" type="image/png" href="./assets/favicon.png" />
+    <link rel="stylesheet" href="./css/style.css"></head>
+<body>
+    <div id="layout-wrapper">
+      <div id="header">
+        <div id="logo">
+          <a href="/"><img src="./assets/header.png" height="70" width="122"/></a>
+        </div>
+        <div id="nav">
+          <button id="getsize" type="button" class="menubouton">Getsize</button>
+          <button id="listforpy" type="button" class="menubouton">List for pinyin</button>
+          <button id="listforzi" type="button" class="menubouton">List for hanzi</button>
+          <button id="listforstrokes" type="button" class="menubouton">List for strokes</button>
+          <button id="listdic" type="button" class="menubouton">List dictionary</button>
+        </div>
+      </div>
+      <div style="clear: both"></div>
+      <div id="content">
+      Select a menu item hereabove to get started
+      </div>
+
+    </div><!-- end layout-wrapper -->
+    <div id="footer">
+      See source code at
+        <a href="https://github.com/francisstephan/wasm-chinesewriter" target="_blank">
+          https://github.com/francisstephan/wasm-chinesewriter</a>
+            <br /><br />
+      For other languages, see also
+        <a href="https://www.eludev.fr/keyboards/" target="_blank">
+          https://www.eludev.fr/keyboards/</a>
+    </div><!-- end footer -->
+
+    <script type="module" src="./js/index.js"></script>
+    <script>
+      window.onload = function () {
+        elem = document.body;
+        elem.addEventListener("keydown", esckey);
+      }
+      function esckey(e) {
+        if (e.keyCode == 27) { // key esc : cancel form
+          contenu = document.getElementById("content");
+          if (contenu.innerHTML.includes("<form ")) { contenu.innerHTML = "Form canceled.";}
+        }
+      }
+    </script>
+</body>
+</html>
