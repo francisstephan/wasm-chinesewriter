@@ -29,3 +29,5 @@ development was quite easy, except for `form` management, which requires web-sys
 I plan to write a short tutorial on the subject of forms with rust + wasm.
 
 I found a working example in [https://codeberg.org/teotwaki/rust-wasm-form-validation-tutorial/src/branch/main/wasm/src/lib.rs](https://codeberg.org/teotwaki/rust-wasm-form-validation-tutorial/src/branch/main/wasm/src/lib.rs), which solved the issue for me.
+
+Watch live at [https://eludev.fr/wasmzidian/](https://eludev.fr/wasmzidian/)
