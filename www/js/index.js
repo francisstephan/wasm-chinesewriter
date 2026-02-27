@@ -34,7 +34,7 @@ run();
 
 function printsize() {
   let container = document.getElementById("content");
-  container.innerHTML = "Database size : " + getsize();
+  container.innerHTML = "Dictionary size : " + getsize() + " zi";
 }
 
 function printpyform() {

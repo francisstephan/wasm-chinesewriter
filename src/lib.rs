@@ -109,7 +109,7 @@ pub fn connectpyform() -> Result<(), JsValue> {
 
     // closure.forget(); // keep closure alive
     let storeclosure = Storeclosure { closure: closure };
-    CLOSURE.replace(storeclosure);
+    CLOSURE.set(storeclosure);
 
     Ok(())
 }
@@ -148,7 +148,7 @@ pub fn connectziform() -> Result<(), JsValue> {
 
     // closure.forget(); // keep closure alive
     let storeclosure = Storeclosure { closure: closure };
-    CLOSURE.replace(storeclosure);
+    CLOSURE.set(storeclosure);
 
     Ok(())
 }
@@ -189,7 +189,7 @@ pub fn connectstrokeform() -> Result<(), JsValue> {
 
     // closure.forget(); // keep closure alive
     let storeclosure = Storeclosure { closure: closure };
-    CLOSURE.replace(storeclosure);
+    CLOSURE.set(storeclosure);
 
     Ok(())
 }
