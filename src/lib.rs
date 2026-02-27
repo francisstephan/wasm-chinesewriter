@@ -1,9 +1,21 @@
 // src/lib.rs
 mod dbase;
+
+use std::cell::Cell;
 use wasm_bindgen::prelude::*;
 use web_sys::{Event, HtmlFormElement, HtmlInputElement, console, window};
 
-//This Rust function will be called from Js
+struct Storeclosure {
+    closure: Closure<dyn FnMut(Event)>,
+}
+
+thread_local! {
+    static CLOSURE: Cell<Storeclosure> = Cell::new(Storeclosure {
+        closure: Closure::<dyn FnMut(Event)>::once(move |event: Event| {
+            event.prevent_default(); })
+    });
+}
+
 #[wasm_bindgen]
 pub fn getsize() -> usize {
     dbase::getsize()
@@ -61,6 +73,7 @@ pub fn getstrokeform() -> String {
     String::from(form)
 }
 
+// https://deepwiki.com/rustwasm/wasm-bindgen/2.3-closure-system
 #[wasm_bindgen]
 pub fn connectpyform() -> Result<(), JsValue> {
     let document = window().unwrap().document().unwrap();
@@ -69,7 +82,8 @@ pub fn connectpyform() -> Result<(), JsValue> {
         .unwrap()
         .dyn_into::<HtmlFormElement>()?;
     let form_ref = form.clone();
-    let closure = Closure::<dyn Fn(Event)>::new(move |event: Event| {
+
+    let closure = Closure::<dyn FnMut(Event)>::once(move |event: Event| {
         event.prevent_default(); // stop page reload
 
         console::log_1(&"in callback closure".into());
@@ -93,7 +107,9 @@ pub fn connectpyform() -> Result<(), JsValue> {
 
     form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;
 
-    closure.forget(); // keep closure alive
+    // closure.forget(); // keep closure alive
+    let storeclosure = Storeclosure { closure: closure };
+    CLOSURE.replace(storeclosure);
 
     Ok(())
 }
@@ -106,7 +122,7 @@ pub fn connectziform() -> Result<(), JsValue> {
         .unwrap()
         .dyn_into::<HtmlFormElement>()?;
     let form_ref = form.clone();
-    let closure = Closure::<dyn Fn(Event)>::new(move |event: Event| {
+    let closure = Closure::<dyn FnMut(Event)>::once(move |event: Event| {
         event.prevent_default(); // stop page reload
 
         console::log_1(&"in callback closure".into());
@@ -130,7 +146,9 @@ pub fn connectziform() -> Result<(), JsValue> {
 
     form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;
 
-    closure.forget(); // keep closure alive
+    // closure.forget(); // keep closure alive
+    let storeclosure = Storeclosure { closure: closure };
+    CLOSURE.replace(storeclosure);
 
     Ok(())
 }
@@ -143,7 +161,7 @@ pub fn connectstrokeform() -> Result<(), JsValue> {
         .unwrap()
         .dyn_into::<HtmlFormElement>()?;
     let form_ref = form.clone();
-    let closure = Closure::<dyn Fn(Event)>::new(move |event: Event| {
+    let closure = Closure::<dyn FnMut(Event)>::once(move |event: Event| {
         event.prevent_default(); // stop page reload
 
         console::log_1(&"in callback closure".into());
@@ -169,7 +187,9 @@ pub fn connectstrokeform() -> Result<(), JsValue> {
 
     form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;
 
-    closure.forget(); // keep closure alive
+    // closure.forget(); // keep closure alive
+    let storeclosure = Storeclosure { closure: closure };
+    CLOSURE.replace(storeclosure);
 
     Ok(())
 }
