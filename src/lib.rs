@@ -8,11 +8,13 @@ use web_sys::{Event, HtmlFormElement, HtmlInputElement, console, window};
 struct Storeclosure {
     closure: Closure<dyn FnMut(Event)>,
 }
+// we use a struct because Cell requires a Sized element
+// see https://dev-doc.rust-lang.org/stable/std/cell/struct.Cell.html
 
 thread_local! {
     static CLOSURE: Cell<Storeclosure> = Cell::new(Storeclosure {
         closure: Closure::<dyn FnMut(Event)>::once(move |event: Event| {
-            event.prevent_default(); })
+            event.prevent_default(); }) // dummy closure to keep the compiler happy
     });
 }
 
@@ -43,7 +45,6 @@ pub fn getpyform() -> String {
 			<button id="cancel" class="menubouton">Cancel</button>
 	  </form>
 	"##;
-
     String::from(form)
 }
 
@@ -73,7 +74,7 @@ pub fn getstrokeform() -> String {
     String::from(form)
 }
 
-// https://deepwiki.com/rustwasm/wasm-bindgen/2.3-closure-system
+// see https://deepwiki.com/rustwasm/wasm-bindgen/2.3-closure-system
 #[wasm_bindgen]
 pub fn connectpyform() -> Result<(), JsValue> {
     let document = window().unwrap().document().unwrap();
@@ -81,33 +82,28 @@ pub fn connectpyform() -> Result<(), JsValue> {
         .get_element_by_id("pyinput")
         .unwrap()
         .dyn_into::<HtmlFormElement>()?;
-    let form_ref = form.clone();
+    let form_ref = form.clone(); // will be moved in the Closure
 
     let closure = Closure::<dyn FnMut(Event)>::once(move |event: Event| {
         event.prevent_default(); // stop page reload
-
-        console::log_1(&"in callback closure".into());
         let input = &form_ref
             .get_with_name("pinyin_ton")
             .unwrap()
             .dyn_into::<HtmlInputElement>()
             .unwrap();
         if !input.check_validity() {
+            // performs the Html checks included in the form (line 43 hereabove)
             input.report_validity();
             return;
         }
-        // form_ref.submit().unwrap();
         let binding = input.value();
         let pinyin = binding.as_str();
         ziprinter(pinyin, dbase::pylist(pinyin));
-
-        console::log_1(&format!("Pinyin_ton :{}", input.value()).into());
-        console::log_1(&"exiting callback closure".into());
     });
 
     form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;
 
-    // closure.forget(); // keep closure alive
+    // closure.forget(); // keep closure alive : avoid this if memory leaks are an issue
     let storeclosure = Storeclosure { closure: closure };
     CLOSURE.set(storeclosure);
 
@@ -125,23 +121,21 @@ pub fn connectziform() -> Result<(), JsValue> {
     let closure = Closure::<dyn FnMut(Event)>::once(move |event: Event| {
         event.prevent_default(); // stop page reload
 
-        console::log_1(&"in callback closure".into());
+        console::log_1(&"in ziform callback closure".into());
         let input = &form_ref
             .get_with_name("carac")
             .unwrap()
             .dyn_into::<HtmlInputElement>()
             .unwrap();
         if !input.check_validity() {
+            // check that there is exactly one char (line 56 hereabove)
             input.report_validity();
             return;
         }
-        // form_ref.submit().unwrap();
+
         let binding = input.value();
         let carac = binding.as_str();
         ziprinter(carac, dbase::zilist(carac));
-
-        console::log_1(&format!("Character :{}", input.value()).into());
-        console::log_1(&"exiting callback closure".into());
     });
 
     form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;
@@ -164,25 +158,23 @@ pub fn connectstrokeform() -> Result<(), JsValue> {
     let closure = Closure::<dyn FnMut(Event)>::once(move |event: Event| {
         event.prevent_default(); // stop page reload
 
-        console::log_1(&"in callback closure".into());
         let input = &form_ref
             .get_with_name("stroke")
             .unwrap()
             .dyn_into::<HtmlInputElement>()
             .unwrap();
         if !input.check_validity() {
+            // check that input is a number between 1 and 30 (line 69 hereabove)
             input.report_validity();
             return;
         }
-        // form_ref.submit().unwrap();
+
         let binding = input.value();
         let carac = binding.as_str();
         console::log_1(&format!("Stroke number :{}", input.value()).into());
         let nbstroke: i64 = carac.parse().unwrap(); // we already checked numeric validity
         let mess = format!("Characters with {} strokes", nbstroke);
         ziprinter(&mess, dbase::strokelist(nbstroke));
-
-        console::log_1(&"exiting callback closure".into());
     });
 
     form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;
@@ -200,14 +192,14 @@ fn ziprinter(query: &str, vec: Vec<dbase::Zi>) {
     let cont = document.get_element_by_id("content").unwrap();
 
     if vec.len() == 0 {
-        cont.set_inner_html(&format!("No result for query {}", query));
+        cont.set_inner_html(&format!("No result for query \"{}\"", query));
     } else {
         print = format!("Result for query \"{}\" :<br />", query);
         print.push_str("<table><tr><td>Strokes</td><td>Pinyin</td><td>Unicode</td><td>Character</td><td>Translation</td></tr>");
         for zi in vec {
             print.push_str(&format!(
                 "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td>",
-                zi.strokes, zi.pinyin_ton, zi.unicode, zi.hanzi, zi.sens,
+                zi.strokes, zi.pinyin_ton, zi.unicode, zi.hanzi, zi.sens
             ));
         }
         cont.set_inner_html(&print);

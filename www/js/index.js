@@ -14,6 +14,8 @@ import init, {
 async function run() {
   const wasm = await init();
 
+  // necessary because index.js will be loaded as a wasm module;
+  // directly attaching printsize() to the button in index.html does not work:
   let b = document.getElementById("getsize");
   b.addEventListener("click", (ev) => printsize());
 
