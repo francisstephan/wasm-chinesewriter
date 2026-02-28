@@ -105,8 +105,9 @@ pub fn connectpyform() -> Result<(), JsValue> {
 
     // closure.forget(); // keep closure alive : avoid this if memory leaks are an issue
     let storeclosure = Storeclosure { closure: closure };
-    CLOSURE.set(storeclosure);
-
+    CLOSURE.set(storeclosure); // keep closure alive (otherwise it is dropped when leaving scope)
+    // The last defined closure remains stored in CLOSURE, until it gets replaced by a new one
+    // This works because there is at most one form open at any given time in this program
     Ok(())
 }
 
@@ -140,7 +141,6 @@ pub fn connectziform() -> Result<(), JsValue> {
 
     form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;
 
-    // closure.forget(); // keep closure alive
     let storeclosure = Storeclosure { closure: closure };
     CLOSURE.set(storeclosure);
 
@@ -172,14 +172,13 @@ pub fn connectstrokeform() -> Result<(), JsValue> {
         let binding = input.value();
         let carac = binding.as_str();
         console::log_1(&format!("Stroke number :{}", input.value()).into());
-        let nbstroke: i64 = carac.parse().unwrap(); // we already checked numeric validity
+        let nbstroke: i64 = carac.parse().unwrap(); // we checked numeric validity line 166
         let mess = format!("Characters with {} strokes", nbstroke);
         ziprinter(&mess, dbase::strokelist(nbstroke));
     });
 
     form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;
 
-    // closure.forget(); // keep closure alive
     let storeclosure = Storeclosure { closure: closure };
     CLOSURE.set(storeclosure);
 
