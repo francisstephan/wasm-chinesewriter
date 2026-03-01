@@ -8,10 +8,10 @@ use web_sys::{Event, HtmlFormElement, HtmlInputElement, console, window};
 struct Storeclosure {
     closure: Closure<dyn FnMut(Event)>,
 }
-// we use a struct because Cell requires a Sized element
+// we use a struct because Cell (line 15 herebelow) requires a Sized element
 // see https://dev-doc.rust-lang.org/stable/std/cell/struct.Cell.html
 
-thread_local! {
+thread_local! {  // https://www.sitepoint.com/rust-global-variables/
     static CLOSURE: Cell<Storeclosure> = Cell::new(Storeclosure {
         closure: Closure::<dyn FnMut(Event)>::once(move |event: Event| {
             event.prevent_default(); }) // dummy closure to keep the compiler happy
@@ -38,7 +38,7 @@ pub fn cancel() {
 #[wasm_bindgen]
 pub fn getpyform() -> String {
     let form = r##"
-        <form id="pyinput">
+        <form id="pyinput" autocomplete="off">
 		    <label for="pinyin">Pinyin+tone (using pattern ^[a-z,ü]+[0-4]?) :</label>
 		    <input id="pinyin" name="pinyin_ton" type="text" pattern="^[a-z,ü]+[0-4]?" autofocus>
 		    <button class="menubouton" type="submit">Submit</button>
@@ -46,14 +46,14 @@ pub fn getpyform() -> String {
 	  </form>
 	"##;
     String::from(form)
-}
+} // autofocus does not work, will generate warning in console, see index.js l.46
 
 #[wasm_bindgen]
 pub fn getziform() -> String {
     let form = r##"
-	  <form id="ziinput">
+	  <form id="ziinput" autocomplete="off">
 		    <label for="carac">Character:</label>
-		    <input id="carac" name="carac" type="text" autofocus required minlength="1" maxlength="1">
+		    <input id="carac" name="carac" type="text" minlength="1" maxlength="1">
 		    <button class="menubouton" type="submit">Submit</button>
 			<button id="cancel" class="menubouton">Cancel</button>
 	  </form>
@@ -64,7 +64,7 @@ pub fn getziform() -> String {
 #[wasm_bindgen]
 pub fn getstrokeform() -> String {
     let form = r##"
-	  <form id="strokeinput">
+	  <form id="strokeinput" autocomplete="off">
 		    <label for="stroke">Number of strokes:</label>
 		    <input id="stroke" name="stroke" type="number"  min="1" max="30">
 		    <button class="menubouton" type="submit">Submit </button>
@@ -82,7 +82,7 @@ pub fn connectpyform() -> Result<(), JsValue> {
         .get_element_by_id("pyinput")
         .unwrap()
         .dyn_into::<HtmlFormElement>()?;
-    let form_ref = form.clone(); // will be moved in the Closure
+    let form_ref = form.clone(); // will be moved in the closure
 
     let closure = Closure::<dyn FnMut(Event)>::once(move |event: Event| {
         event.prevent_default(); // stop page reload
@@ -107,7 +107,7 @@ pub fn connectpyform() -> Result<(), JsValue> {
     let storeclosure = Storeclosure { closure: closure };
     CLOSURE.set(storeclosure); // keep closure alive (otherwise it is dropped when leaving scope)
     // The last defined closure remains stored in CLOSURE, until it gets replaced by a new one
-    // This works because there is at most one form open at any given time in this program
+    // This works because there is at most one form present at any given time in this program
     Ok(())
 }
 
@@ -186,14 +186,16 @@ pub fn connectstrokeform() -> Result<(), JsValue> {
 }
 
 fn ziprinter(query: &str, vec: Vec<dbase::Zi>) {
-    let document = window().unwrap().document().unwrap();
-    let mut print: String;
-    let cont = document.get_element_by_id("content").unwrap();
-
+    let cont = window()
+        .unwrap()
+        .document()
+        .unwrap()
+        .get_element_by_id("content")
+        .unwrap();
     if vec.len() == 0 {
         cont.set_inner_html(&format!("No result for query \"{}\"", query));
     } else {
-        print = format!("Result for query \"{}\" :<br />", query);
+        let mut print: String = format!("Result for query \"{}\" :<br />", query);
         print.push_str("<table><tr><td>Strokes</td><td>Pinyin</td><td>Unicode</td><td>Character</td><td>Translation</td></tr>");
         for zi in vec {
             print.push_str(&format!(
