@@ -29,13 +29,6 @@ pub fn listdic() -> () {
 }
 
 #[wasm_bindgen]
-pub fn cancel() {
-    let document = window().unwrap().document().unwrap();
-    let cont = document.get_element_by_id("content").unwrap();
-    cont.set_inner_html("Form canceled.");
-}
-
-#[wasm_bindgen]
 pub fn getpyform() -> String {
     let form = r##"
         <form id="pyinput" autocomplete="off">

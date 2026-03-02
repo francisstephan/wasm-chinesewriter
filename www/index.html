@@ -42,7 +42,7 @@
         elem.addEventListener("keydown", esckey);
       }
       function esckey(e) {
-        if (e.keyCode == 27) { // key esc : cancel form
+        if (e.keyCode == 27) { // esc key : cancel form
           contenu = document.getElementById("content");
           if (contenu.innerHTML.includes("<form ")) { contenu.innerHTML = "Form canceled.";}
         }

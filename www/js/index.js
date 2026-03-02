@@ -7,7 +7,6 @@ import init, {
   connectziform,
   getstrokeform,
   connectstrokeform,
-  cancel,
   listdic,
 } from "../pkg/wasmzidian.js";
 
@@ -45,7 +44,7 @@ function printpyform() {
   connectpyform(); // back to wasm for form submit callback
   document.getElementById("pinyin").focus(); // autofocus is not working, but this works
   let c = document.getElementById("cancel");
-  c.addEventListener("click", (ev) => cancel()); // normal way to add onclick function from wasm
+  c.addEventListener("click", (ev) => cancel());
 }
 
 function printziform() {
@@ -54,7 +53,7 @@ function printziform() {
   connectziform(); // back to wasm for form submit callback
   document.getElementById("carac").focus(); // autofocus is not working, but this works
   let c = document.getElementById("cancel");
-  c.addEventListener("click", (ev) => cancel()); // normal way to add onclick function from wasm
+  c.addEventListener("click", (ev) => cancel());
 }
 
 function printstrokeform() {
@@ -63,5 +62,10 @@ function printstrokeform() {
   connectstrokeform(); // back to wasm for form submit callback
   document.getElementById("stroke").focus(); // autofocus is not working, but this works
   let c = document.getElementById("cancel");
-  c.addEventListener("click", (ev) => cancel()); // normal way to add onclick function from wasm
+  c.addEventListener("click", (ev) => cancel());
+}
+
+function cancel() {
+  let container = document.getElementById("content");
+  container.innerHTML = "Form canceled.";
 }
