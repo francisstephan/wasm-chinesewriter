@@ -114,7 +114,7 @@ h1.title {
     padding-top: 80px;
 }
 h2 {
-    margin-top: -20px;
+    margin-top: -10px;
 }
 
 #layout-wrapper {
@@ -126,6 +126,13 @@ button.menubouton,
 button.Addzi {
     margin-left: 5px;
     background-color: darkblue;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+button.hanzibouton {
+    margin-left: 5px;
+    background-color: #f44;
     color: white;
     font-size: 16px;
     font-weight: bold;
@@ -162,30 +169,8 @@ td.stc {
     color: red;
 }
 
-form.multi {
-    /* https://www.digitalocean.com/community/tutorials/how-to-style-common-form-elements-with-css */
-    margin-left: 10%;
-    width: 40%;
-    box-sizing: border-box;
-    padding: 2rem;
-    border-radius: 1rem;
-    background-color: hsl(0, 0%, 90%);
-    border: 4px solid hsl(0, 0%, 60%);
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0;
-}
-
-button.formbut {
-    margin-top: 20px;
-    background-color: #a0522d;
-    color: white;
-    width: 100%;
-    height: 30px;
-    width: 70%;
-    font-size: 16px;
-    font-weight: bold;
-    margin-left: 15%;
+form {
+    display: inline;
 }
 
 p#formhead {

@@ -35,8 +35,8 @@ pub fn getpyform() -> String {
 		    <label for="pinyin">Pinyin+tone (using pattern ^[a-z,ü]+[0-4]?) :</label>
 		    <input id="pinyin" name="pinyin_ton" type="text" pattern="^[a-z,ü]+[0-4]?" autofocus>
 		    <button class="menubouton" type="submit">Submit</button>
-			<button id="cancel" class="menubouton">Cancel</button>
 	  </form>
+	  <button id="cancel" class="menubouton">Cancel</button>
 	"##;
     String::from(form)
 } // autofocus does not work, will generate warning in console, see index.js l.46
@@ -48,8 +48,8 @@ pub fn getziform() -> String {
 		    <label for="carac">Character:</label>
 		    <input id="carac" name="carac" type="text" minlength="1" maxlength="1">
 		    <button class="menubouton" type="submit">Submit</button>
-			<button id="cancel" class="menubouton">Cancel</button>
 	  </form>
+	  <button id="cancel" class="menubouton">Cancel</button>
 	"##;
     String::from(form)
 }
@@ -61,9 +61,38 @@ pub fn getstrokeform() -> String {
 		    <label for="stroke">Number of strokes:</label>
 		    <input id="stroke" name="stroke" type="number"  min="1" max="30">
 		    <button class="menubouton" type="submit">Submit </button>
-			<button id="cancel" class="menubouton">Cancel</button>
 	  </form>
+	  <button id="cancel" class="menubouton">Cancel</button>
 	"##;
+    String::from(form)
+}
+
+#[wasm_bindgen]
+pub fn whz() -> String {
+    // hx-post="/candidatelist" hx-target="#zilist" hx-swap="innerHTML"
+    let form = r##"
+        <h2>
+	    Use latin keyboard, write text in chinese characters (hanzi, 汉字)
+        </h2>
+        <p>1. Enter pinyin with tone in the "Enter" textarea below. A list of possible hanzi appears.<br />
+           2. Select hanzi from list by clicking on it.<br />
+           The selected zi gets added to the <b>Result hanzi text</b>, which you may copy to clipboard, send to Google translate, etc.<br />
+           To add more hanzi to the text, repeat steps 1 & 2 again</p>
+
+        <form id="postzi" autocomplete="off">
+            <label for="pinyin">Enter pinyin+tone (press / or space after pinyin if tone unknown) :</label>
+            <input type='text' id='pinyin' name='pinyin_ton' size='10' oninput='convertToZi()'>
+            <button id="subpy" style="display:none" type="submit"></button>
+        </form>
+        <p id="resultat"><b>Result hanzi text :</b>
+            <input type='text' id='zistring' size='40'></p>
+
+        <button class = "Addzi" onclick='copyTextToClipboard()' >Copy to clipboard</button>
+        <button class = "Addzi" onclick='reset()' >Reset</button>
+        <button class = "Addzi" onclick="lookup(document.getElementById('zistring').value)" >Google Translate text</button>
+        <button class = "Addzi" onclick="lookupWrittenChinese(document.getElementById('zistring').value)" >Lookup Hanzii dictionary</button>
+        <div id="zilist"></div>
+    "##;
     String::from(form)
 }
 
@@ -178,6 +207,43 @@ pub fn connectstrokeform() -> Result<(), JsValue> {
     Ok(())
 }
 
+#[wasm_bindgen]
+pub fn connectwhzform() -> Result<(), JsValue> {
+    let document = window().unwrap().document().unwrap();
+    let form = document
+        .get_element_by_id("postzi")
+        .unwrap()
+        .dyn_into::<HtmlFormElement>()?;
+    let form_ref = form.clone(); // will be moved in the closure
+
+    let closure = Closure::<dyn FnMut(Event)>::new(move |event: Event| {
+        event.prevent_default(); // stop page reload
+        let input = &form_ref
+            .get_with_name("pinyin_ton")
+            .unwrap()
+            .dyn_into::<HtmlInputElement>()
+            .unwrap();
+        if !input.check_validity() {
+            // performs the Html checks included in the form (line 43 hereabove)
+            input.report_validity();
+            return;
+        }
+        let binding = input.value();
+        let pinyin = binding.as_str();
+        console::log_1(&format!("Pinyin :{}", input.value()).into());
+        printcandidatelist(pinyin);
+    });
+
+    form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;
+
+    // closure.forget(); // keep closure alive : avoid this if memory leaks are an issue
+    let storeclosure = Storeclosure { closure: closure };
+    CLOSURE.set(storeclosure); // keep closure alive (otherwise it is dropped when leaving scope)
+    // The last defined closure remains stored in CLOSURE, until it gets replaced by a new one
+    // This works because there is at most one form present at any given
+    Ok(())
+}
+
 fn ziprinter(query: &str, vec: Vec<dbase::Zi>) {
     let cont = window()
         .unwrap()
@@ -198,4 +264,21 @@ fn ziprinter(query: &str, vec: Vec<dbase::Zi>) {
         }
         cont.set_inner_html(&print);
     }
+}
+fn printcandidatelist(chain: &str) {
+    let answer = dbase::getcandidatelist(chain);
+    let mut resp: String;
+    if answer.is_empty() {
+        resp = "<br /><br />No hanzi available for request".to_owned()
+    } else {
+        resp = String::from("<br />Select one hanzi from this list:<br>");
+        resp.push_str(&answer)
+    }
+    let cont = window()
+        .unwrap()
+        .document()
+        .unwrap()
+        .get_element_by_id("zilist")
+        .unwrap();
+    cont.set_inner_html(&resp);
 }

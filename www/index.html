@@ -17,6 +17,7 @@
           <button id="listforzi" type="button" class="menubouton">List for hanzi</button>
           <button id="listforstrokes" type="button" class="menubouton">List for strokes</button>
           <button id="listdic" type="button" class="menubouton">List dictionary</button>
+          <button id="writehanzi" type="button" class="hanzibouton">Write hanzi text</button>
         </div>
       </div>
       <div style="clear: both"></div>
@@ -36,17 +37,6 @@
     </div><!-- end footer -->
 
     <script type="module" src="./js/index.js"></script>
-    <script>
-      window.onload = function () {
-        elem = document.body;
-        elem.addEventListener("keydown", esckey);
-      }
-      function esckey(e) {
-        if (e.keyCode == 27) { // esc key : cancel form
-          contenu = document.getElementById("content");
-          if (contenu.innerHTML.includes("<form ")) { contenu.innerHTML = "Form canceled.";}
-        }
-      }
-    </script>
+    <script src="./js/chwriter.js"></script>
 </body>
 </html>

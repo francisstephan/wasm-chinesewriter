@@ -7,6 +7,8 @@ import init, {
   connectziform,
   getstrokeform,
   connectstrokeform,
+  whz,
+  connectwhzform,
   listdic,
 } from "../pkg/wasmzidian.js";
 
@@ -29,6 +31,9 @@ async function run() {
 
   let f = document.getElementById("listdic");
   f.addEventListener("click", (ev) => listdic());
+
+  let g = document.getElementById("writehanzi");
+  g.addEventListener("click", (ev) => printwhz());
 }
 
 run();
@@ -45,6 +50,7 @@ function printpyform() {
   document.getElementById("pinyin").focus(); // autofocus is not working, but this works
   let c = document.getElementById("cancel");
   c.addEventListener("click", (ev) => cancel());
+  document.body.addEventListener("keydown", esckey);
 }
 
 function printziform() {
@@ -54,6 +60,7 @@ function printziform() {
   document.getElementById("carac").focus(); // autofocus is not working, but this works
   let c = document.getElementById("cancel");
   c.addEventListener("click", (ev) => cancel());
+  document.body.addEventListener("keydown", esckey);
 }
 
 function printstrokeform() {
@@ -63,9 +70,13 @@ function printstrokeform() {
   document.getElementById("stroke").focus(); // autofocus is not working, but this works
   let c = document.getElementById("cancel");
   c.addEventListener("click", (ev) => cancel());
+  document.body.addEventListener("keydown", esckey);
 }
 
-function cancel() {
+function printwhz() {
   let container = document.getElementById("content");
-  container.innerHTML = "Form canceled.";
+  container.innerHTML = whz();
+  connectwhzform(); // back to wasm for form submit callback
+  document.getElementById("pinyin").focus(); // autofocus is not working, but this works
+  document.body.removeEventListener("keydown", esckey);
 }
