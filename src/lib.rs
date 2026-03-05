@@ -8,9 +8,9 @@ use web_sys::{Event, HtmlFormElement, HtmlInputElement, console, window};
 struct Storeclosure {
     closure: Closure<dyn FnMut(Event)>,
 }
-// we use a struct because Cell (line 15 herebelow) requires a Sized element
+// we use this struct because Cell (line 15 herebelow) requires a Sized element
+// meaning we cannot call Cell(Closure) but we can call Cell(Storeclosure)
 // see https://dev-doc.rust-lang.org/stable/std/cell/struct.Cell.html
-
 thread_local! {  // https://www.sitepoint.com/rust-global-variables/
     static CLOSURE: Cell<Storeclosure> = Cell::new(Storeclosure {
         closure: Closure::<dyn FnMut(Event)>::once(move |event: Event| {
@@ -39,7 +39,7 @@ pub fn getpyform() -> String {
 	  <button id="cancel" class="menubouton">Cancel</button>
 	"##;
     String::from(form)
-} // autofocus does not work, will generate warning in console, see index.js l.46
+} // autofocus does not work, will generate warning in console, see index.js l.50
 
 #[wasm_bindgen]
 pub fn getziform() -> String {
@@ -78,15 +78,12 @@ pub fn whz() -> String {
            2. Select hanzi from list by clicking on it.<br />
            The selected zi gets added to the <b>Result hanzi text</b>, which you may copy to clipboard, send to Google translate, etc.<br />
            To add more hanzi to the text, repeat steps 1 & 2 again</p>
-
         <form id="postzi" autocomplete="off">
             <label for="pinyin">Enter pinyin+tone (press / or space after pinyin if tone unknown) :</label>
-            <input type='text' id='pinyin' name='pinyin_ton' size='10' oninput='convertToZi()'>
+            <input type='text' id='pinyin' name='pinyin_ton' pattern="^[a-z,ü]+[0-4]?" size="10" oninput='convertToZi()'>
             <button id="subpy" style="display:none" type="submit"></button>
         </form>
-        <p id="resultat"><b>Result hanzi text :</b>
-            <input type='text' id='zistring' size='40'></p>
-
+        <p id="resultat"><b>Result hanzi text :</b><input type='text' id='zistring' size='60'></p>
         <button class = "Addzi" onclick='copyTextToClipboard()' >Copy to clipboard</button>
         <button class = "Addzi" onclick='reset()' >Reset</button>
         <button class = "Addzi" onclick="lookup(document.getElementById('zistring').value)" >Google Translate text</button>
@@ -114,7 +111,7 @@ pub fn connectpyform() -> Result<(), JsValue> {
             .dyn_into::<HtmlInputElement>()
             .unwrap();
         if !input.check_validity() {
-            // performs the Html checks included in the form (line 43 hereabove)
+            // performs the Html checks included in the form (line 36 hereabove)
             input.report_validity();
             return;
         }
@@ -151,7 +148,7 @@ pub fn connectziform() -> Result<(), JsValue> {
             .dyn_into::<HtmlInputElement>()
             .unwrap();
         if !input.check_validity() {
-            // check that there is exactly one char (line 56 hereabove)
+            // check that there is exactly one char (line 49 hereabove)
             input.report_validity();
             return;
         }
@@ -186,7 +183,7 @@ pub fn connectstrokeform() -> Result<(), JsValue> {
             .dyn_into::<HtmlInputElement>()
             .unwrap();
         if !input.check_validity() {
-            // check that input is a number between 1 and 30 (line 69 hereabove)
+            // check that input is a number between 1 and 30 (line 62 hereabove)
             input.report_validity();
             return;
         }
@@ -224,7 +221,7 @@ pub fn connectwhzform() -> Result<(), JsValue> {
             .dyn_into::<HtmlInputElement>()
             .unwrap();
         if !input.check_validity() {
-            // performs the Html checks included in the form (line 43 hereabove)
+            // performs the Html checks included in the form (line 83 hereabove)
             input.report_validity();
             return;
         }

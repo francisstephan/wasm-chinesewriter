@@ -27,6 +27,10 @@ and point your browser to localhost:8080
 After working through the nobundle guide [no bundle version of the wasm-bindgen guide](https://nobundle.github.io/book/examples/wasm-bindgen_guide.html), especially examples 1.1, 1.4 and 1.5,
 development was quite easy, except for `form` management, which requires web-sys Closure (partially shown in example 1.7 but with no complete form example).
 
-I found relevant information in [https://sebastian.lauwe.rs/blog/rust-wasm-form-validation/](https://sebastian.lauwe.rs/blog/rust-wasm-form-validation/) as well as a working example in [https://codeberg.org/teotwaki/rust-wasm-form-validation-tutorial/src/branch/main/wasm/src/lib.rs](https://codeberg.org/teotwaki/rust-wasm-form-validation-tutorial/src/branch/main/wasm/src/lib.rs), which solved the issue for me.
+I found relevant information in [https://sebastian.lauwe.rs/blog/rust-wasm-form-validation/](https://sebastian.lauwe.rs/blog/rust-wasm-form-validation/) as well as an almost working example in [https://codeberg.org/teotwaki/rust-wasm-form-validation-tutorial/src/branch/main/wasm/src/lib.rs](https://codeberg.org/teotwaki/rust-wasm-form-validation-tutorial/src/branch/main/wasm/src/lib.rs), which solved the issue for me.
 
-Watch live at [https://eludev.fr/wasmzidian/](https://eludev.fr/wasmzidian/)
+One issue for which I had to create my own solution was that of closure conservation, in order to keep the closure available after it goes out of scope. 
+
+All available examples use "closure.forget()", which means some memory gets allocating for storing the closure, creating a memory leak if many closures are created. Instead, I use a thread_local static variable to store the closure within a Cell element, meaning each new closure replaces the preceding one, which is perfectly ok with this program since I have at most one form active (showing in the browser) at any given time.
+
+Watch live at [https://wasm-chinesewriter.netlify.app/](https://wasm-chinesewriter.netlify.app/)

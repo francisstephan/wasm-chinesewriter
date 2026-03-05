@@ -66,16 +66,12 @@ function reset() {
 }
 
 function cancel() {
+  // called from esckey (below) or from cancel button
   let container = document.getElementById("content");
   container.innerHTML = "Form canceled.";
 }
 
 function esckey(e) {
-  if (e.keyCode == 27) {
-    // esc key : cancel form
-    let contenu = document.getElementById("content");
-    if (contenu.innerHTML.includes("<form ")) {
-      contenu.innerHTML = "Form canceled.";
-    }
-  }
+  // esckey : Event listener to cancel form with Esc key
+  if (e.keyCode == 27) cancel();
 }

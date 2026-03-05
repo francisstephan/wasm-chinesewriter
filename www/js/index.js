@@ -30,7 +30,7 @@ async function run() {
   e.addEventListener("click", (ev) => printstrokeform());
 
   let f = document.getElementById("listdic");
-  f.addEventListener("click", (ev) => listdic());
+  f.addEventListener("click", (ev) => printdic());
 
   let g = document.getElementById("writehanzi");
   g.addEventListener("click", (ev) => printwhz());
@@ -39,6 +39,7 @@ async function run() {
 run();
 
 function printsize() {
+  document.body.removeEventListener("keydown", esckey); // esckey defined in chinesewriter.js
   let container = document.getElementById("content");
   container.innerHTML = "Dictionary size : " + getsize() + " zi";
 }
@@ -50,7 +51,7 @@ function printpyform() {
   document.getElementById("pinyin").focus(); // autofocus is not working, but this works
   let c = document.getElementById("cancel");
   c.addEventListener("click", (ev) => cancel());
-  document.body.addEventListener("keydown", esckey);
+  document.body.addEventListener("keydown", esckey); // esckey defined in chinesewriter.js
 }
 
 function printziform() {
@@ -60,7 +61,7 @@ function printziform() {
   document.getElementById("carac").focus(); // autofocus is not working, but this works
   let c = document.getElementById("cancel");
   c.addEventListener("click", (ev) => cancel());
-  document.body.addEventListener("keydown", esckey);
+  document.body.addEventListener("keydown", esckey); // esckey defined in chinesewriter.js
 }
 
 function printstrokeform() {
@@ -70,7 +71,12 @@ function printstrokeform() {
   document.getElementById("stroke").focus(); // autofocus is not working, but this works
   let c = document.getElementById("cancel");
   c.addEventListener("click", (ev) => cancel());
-  document.body.addEventListener("keydown", esckey);
+  document.body.addEventListener("keydown", esckey); // esckey defined in chinesewriter.js
+}
+
+function printdic() {
+  document.body.removeEventListener("keydown", esckey); // esckey defined in chinesewriter.js
+  listdic();
 }
 
 function printwhz() {
@@ -78,5 +84,5 @@ function printwhz() {
   container.innerHTML = whz();
   connectwhzform(); // back to wasm for form submit callback
   document.getElementById("pinyin").focus(); // autofocus is not working, but this works
-  document.body.removeEventListener("keydown", esckey);
+  document.body.removeEventListener("keydown", esckey); // esckey defined in chinesewriter.js
 }
