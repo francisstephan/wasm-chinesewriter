@@ -17,23 +17,24 @@ async function run() {
 
   // necessary because index.js will be loaded as a wasm module;
   // directly attaching printsize() to the button in index.html does not work:
-  let b = document.getElementById("getsize");
-  b.addEventListener("click", (ev) => printsize());
-
-  let c = document.getElementById("listforpy");
-  c.addEventListener("click", (ev) => printpyform());
-
-  let d = document.getElementById("listforzi");
-  d.addEventListener("click", (ev) => printziform());
-
-  let e = document.getElementById("listforstrokes");
-  e.addEventListener("click", (ev) => printstrokeform());
-
-  let f = document.getElementById("listdic");
-  f.addEventListener("click", (ev) => printdic());
-
-  let g = document.getElementById("writehanzi");
-  g.addEventListener("click", (ev) => printwhz());
+  document
+    .getElementById("getsize")
+    .addEventListener("click", (ev) => printsize());
+  document
+    .getElementById("listforpy")
+    .addEventListener("click", (ev) => printpyform());
+  document
+    .getElementById("listforzi")
+    .addEventListener("click", (ev) => printziform());
+  document
+    .getElementById("listforstrokes")
+    .addEventListener("click", (ev) => printstrokeform());
+  document
+    .getElementById("listdic")
+    .addEventListener("click", (ev) => printdic());
+  document
+    .getElementById("writehanzi")
+    .addEventListener("click", (ev) => printwhz());
 }
 
 run();
