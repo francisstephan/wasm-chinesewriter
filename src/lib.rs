@@ -33,20 +33,20 @@ pub fn getpyform() -> String {
     let form = r##"
         <form id="pyinput" autocomplete="off">
 		    <label for="pinyin">Pinyin+tone (using pattern ^[a-z,ü]+[0-4]?) :</label>
-		    <input id="pinyin" name="pinyin_ton" type="text" pattern="^[a-z,ü]+[0-4]?" autofocus>
+		    <input id="pinyin" name="pinyin_ton" type="text" pattern="^[a-z,ü]+[0-4]?" required>
 		    <button class="menubouton" type="submit">Submit</button>
 	  </form>
 	  <button id="cancel" class="menubouton">Cancel</button>
 	"##;
     String::from(form)
-} // autofocus does not work, will generate warning in console, see index.js l.50
+} // autofocus does not work, will generate warning in console, see index.js l.53
 
 #[wasm_bindgen]
 pub fn getziform() -> String {
     let form = r##"
 	  <form id="ziinput" autocomplete="off">
 		    <label for="carac">Character:</label>
-		    <input id="carac" name="carac" type="text" minlength="1" maxlength="1">
+		    <input id="carac" name="carac" type="text" minlength="1" maxlength="1" required>
 		    <button class="menubouton" type="submit">Submit</button>
 	  </form>
 	  <button id="cancel" class="menubouton">Cancel</button>
@@ -59,7 +59,7 @@ pub fn getstrokeform() -> String {
     let form = r##"
 	  <form id="strokeinput" autocomplete="off">
 		    <label for="stroke">Number of strokes:</label>
-		    <input id="stroke" name="stroke" type="number"  min="1" max="30">
+		    <input id="stroke" name="stroke" type="number"  min="1" max="30" required>
 		    <button class="menubouton" type="submit">Submit </button>
 	  </form>
 	  <button id="cancel" class="menubouton">Cancel</button>
@@ -105,19 +105,20 @@ pub fn connectpyform() -> Result<(), JsValue> {
 
     let closure = Closure::<dyn FnMut(Event)>::once(move |event: Event| {
         event.prevent_default(); // stop page reload
-        let input = &form_ref
+        let input_res = &form_ref
             .get_with_name("pinyin_ton")
             .unwrap()
-            .dyn_into::<HtmlInputElement>()
-            .unwrap();
-        if !input.check_validity() {
-            // performs the Html checks included in the form (line 36 hereabove)
-            input.report_validity();
-            return;
+            .dyn_into::<HtmlInputElement>();
+        if let Ok(input) = input_res {
+            if !input.check_validity() {
+                // performs the Html checks included in the form (line 36 hereabove)
+                input.report_validity();
+                return;
+            }
+            let binding = input.value();
+            let pinyin = binding.as_str();
+            ziprinter(pinyin, dbase::pylist(pinyin));
         }
-        let binding = input.value();
-        let pinyin = binding.as_str();
-        ziprinter(pinyin, dbase::pylist(pinyin));
     });
 
     form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;

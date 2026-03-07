@@ -65,7 +65,7 @@ ul.navig li.hanzibouton {
     background-color: #f44;
 }
 ul.navig li ul {
-    opacity: 0;
+    visibility: hidden;
     position: absolute;
     display: block;
     width: 170px;
@@ -87,7 +87,6 @@ ul.navig li:hover {
 }
 ul.navig li:hover ul {
     visibility: visible;
-    opacity: 1;
 }
 ul#manage li,
 ul#lists li.shortitem {
