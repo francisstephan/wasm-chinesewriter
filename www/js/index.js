@@ -61,8 +61,7 @@ function printziform() {
   container.innerHTML = getziform();
   connectziform(); // back to wasm for form submit callback
   document.getElementById("carac").focus(); // autofocus is not working, but this works
-  let c = document.getElementById("cancel");
-  c.addEventListener("click", (ev) => cancel());
+  document.getElementById("cancel").addEventListener("click", cancel);
   document.body.addEventListener("keydown", esckey); // esckey defined in chinesewriter.js
 }
 
@@ -72,15 +71,14 @@ function printstrokeform() {
   container.innerHTML = getstrokeform();
   connectstrokeform(); // back to wasm for form submit callback
   document.getElementById("stroke").focus(); // autofocus is not working, but this works
-  let c = document.getElementById("cancel");
-  c.addEventListener("click", (ev) => cancel());
+  document.getElementById("cancel").addEventListener("click", cancel);
   document.body.addEventListener("keydown", esckey); // esckey defined in chinesewriter.js
 }
 
 function printdic() {
   hidemenu("lists");
   document.body.removeEventListener("keydown", esckey); // esckey defined in chinesewriter.js
-  listdic();
+  listdic(); // in wasm, cf lib.rs line 27
 }
 
 function printwhz() {

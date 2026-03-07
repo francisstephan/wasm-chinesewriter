@@ -79,9 +79,12 @@ function esckey(e) {
 function hidemenu(menu) {
   //document.getElementById(menu).style.visibility='hidden';
   document.getElementById(menu).style.opacity = 0; // use opacity for hiding
-  document.getElementById("getlists").style.backgroundColor = "#00008B";
+  document.getElementById("getlists").style.backgroundColor = "darkblue";
+  document.getElementById("getlists").style.border = "2px solid darkblue";
 }
 function enablemenu(menu) {
   //document.getElementById(menu).style.visibility='visible';
   document.getElementById(menu).style.opacity = 1;
+  document.getElementById("getlists").style.backgroundColor = "green";
+  document.getElementById("getlists").style.border = "2px solid palegreen";
 }
