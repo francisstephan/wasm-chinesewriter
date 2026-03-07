@@ -46,16 +46,17 @@ function printsize() {
 }
 
 function printpyform() {
+  hidemenu("lists");
   let container = document.getElementById("content");
   container.innerHTML = getpyform();
   connectpyform(); // back to wasm for form submit callback
   document.getElementById("pinyin").focus(); // autofocus is not working, but this works
-  let c = document.getElementById("cancel");
-  c.addEventListener("click", (ev) => cancel());
+  document.getElementById("cancel").addEventListener("click", cancel);
   document.body.addEventListener("keydown", esckey); // esckey defined in chinesewriter.js
 }
 
 function printziform() {
+  hidemenu("lists");
   let container = document.getElementById("content");
   container.innerHTML = getziform();
   connectziform(); // back to wasm for form submit callback
@@ -66,6 +67,7 @@ function printziform() {
 }
 
 function printstrokeform() {
+  hidemenu("lists");
   let container = document.getElementById("content");
   container.innerHTML = getstrokeform();
   connectstrokeform(); // back to wasm for form submit callback
@@ -76,6 +78,7 @@ function printstrokeform() {
 }
 
 function printdic() {
+  hidemenu("lists");
   document.body.removeEventListener("keydown", esckey); // esckey defined in chinesewriter.js
   listdic();
 }

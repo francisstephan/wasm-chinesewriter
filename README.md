@@ -31,6 +31,6 @@ I found relevant information in [https://sebastian.lauwe.rs/blog/rust-wasm-form-
 
 One issue for which I had to create my own solution was that of closure conservation, in order to keep the closure available after it goes out of scope. 
 
-All available examples use "closure.forget()", which means some memory gets allocating for storing the closure, creating a memory leak if many closures are created. Instead, I use a thread_local static variable to store the closure within a Cell element, meaning each new closure replaces the preceding one, which is perfectly ok with this program since I have at most one form active (showing in the browser) at any given time.
+All available examples use "closure.forget()", which means some memory gets allocated for storing the closure, creating a memory leak if many closures are created. Instead, I use a thread_local static variable to store the closure within a Cell element, meaning each new closure replaces the preceding one, which is perfectly ok with this program since I have at most one form active (showing in the browser) at any given time.
 
 Watch live at [https://wasm-chinesewriter.netlify.app/](https://wasm-chinesewriter.netlify.app/)

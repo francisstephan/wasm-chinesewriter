@@ -75,3 +75,13 @@ function esckey(e) {
   // esckey : Event listener to cancel form with Esc key
   if (e.keyCode == 27) cancel();
 }
+
+function hidemenu(menu) {
+  //document.getElementById(menu).style.visibility='hidden';
+  document.getElementById(menu).style.opacity = 0; // use opacity for hiding
+  document.getElementById("getlists").style.backgroundColor = "#00008B";
+}
+function enablemenu(menu) {
+  //document.getElementById(menu).style.visibility='visible';
+  document.getElementById(menu).style.opacity = 1;
+}

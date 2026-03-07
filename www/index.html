@@ -12,12 +12,19 @@
           <a href="/"><img src="./assets/header.png" height="70" width="122"/></a>
         </div>
         <div id="nav">
-          <button id="getsize" type="button" class="menubouton">Getsize</button>
-          <button id="listforpy" type="button" class="menubouton">List for pinyin</button>
-          <button id="listforzi" type="button" class="menubouton">List for hanzi</button>
-          <button id="listforstrokes" type="button" class="menubouton">List for strokes</button>
-          <button id="listdic" type="button" class="menubouton">List dictionary</button>
-          <button id="writehanzi" type="button" class="hanzibouton">Write hanzi text</button>
+          <ul class="navig">
+            <li id="getsize">Get size</li>
+            <li id="getlists" onmouseover="enablemenu('lists')" onmouseout="hidemenu('lists')">
+              Get lists
+              <ul id="lists">
+                <li id="listforpy">List for pinyin</li>
+                <li id="listforzi">List for hanzi</li>
+                <li id="listforstrokes">List for strokes</li>
+                <li id="listdic">List dictionary</li>
+              </ul>
+            </li>
+            <li id="writehanzi" class="hanzibouton">Write hanzi text</li>
+          </ul>
         </div>
       </div>
       <div style="clear: both"></div>

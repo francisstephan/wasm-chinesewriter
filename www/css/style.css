@@ -36,7 +36,6 @@ body {
 
 ul.navig {
     position: relative;
-    background: #aabb99;
     display: flex;
     flex: 1 1 auto;
     margin: 0;
@@ -49,8 +48,7 @@ ul.navig li:not(:last-child) {
 ul.navig li {
     border: 2px solid transparent;
     border-radius: 5px;
-    padding: 10px;
-    background: #666;
+    background: darkblue;
     transition: background 0.5s;
     display: block;
     text-align: center;
@@ -63,38 +61,29 @@ ul.navig li {
     font-weight: bold;
     cursor: pointer;
 }
+ul.navig li.hanzibouton {
+    background-color: #f44;
+}
 ul.navig li ul {
-    visibility: hidden;
     opacity: 0;
     position: absolute;
     display: block;
-    width: 150px;
+    width: 170px;
     margin-top: 5px;
     padding: 0;
-    background: #f4b43e;
-    border: 2px solid #f7c833;
-    border-right: 2px solid #f89329;
-    border-bottom: 2px solid #f89329;
-    border-radius: 5px;
-    transition:
-        opacity 0.2s,
-        visibility 0.2s;
+    background-color: #8fc3ff;
 }
 ul.navig li ul li {
     width: 150px;
-    height: 40px;
+    height: 20px;
     float: none;
-    padding: 0;
+    padding: 3px 10px 0 10px;
     margin-bottom: 1px;
 }
-ul.navig li ul li span {
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 40px;
-}
+
 ul.navig li:hover {
-    background: #ec4138;
-    border: 2px solid #f05749;
+    background: green;
+    border: 2px solid palegreen;
 }
 ul.navig li:hover ul {
     visibility: visible;
@@ -130,13 +119,7 @@ button.Addzi {
     font-size: 16px;
     font-weight: bold;
 }
-button.hanzibouton {
-    margin-left: 5px;
-    background-color: #f44;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-}
+
 button.zilistbutton {
     display: inline-block;
     font-size: 20px;
