@@ -22,7 +22,7 @@ python -m http.server --directory www 8080
 ```
 and point your browser to localhost:8080
 
-## Development
+## Development : using forms
 
 After working through the nobundle guide [no bundle version of the wasm-bindgen guide](https://nobundle.github.io/book/examples/wasm-bindgen_guide.html), especially examples 1.1, 1.4 and 1.5,
 development was quite easy, except for `form` management, which requires web-sys Closure (partially shown in example 1.7 but with no complete form example).
@@ -33,4 +33,17 @@ One issue for which I had to create my own solution was that of closure conserva
 
 All available examples use "closure.forget()", which means some memory gets allocated for storing the closure, creating a memory leak if many closures are created. Instead, I use a thread_local static variable to store the closure within a Cell element, meaning each new closure replaces the preceding one, which is perfectly ok with this program since I have at most one form active (showing in the browser) at any given time.
 
-Watch live at [https://wasm-chinesewriter.netlify.app/](https://wasm-chinesewriter.netlify.app/)
+## Deployment 
+
+When I deploy on my usual hosting provider it works, but on the console I get a message `WebAssembly.instantiateStreaming` failed because your server does not serve Wasm with `application/wasm` MIME type. Falling back to `WebAssembly.instantiate` which is slower. Original error:
+ TypeError: Failed to execute 'compile' on 'WebAssembly': Incorrect response MIME type. Expected 'application/wasm'.
+ 
+I suppose this is still the case with many hosting providers.
+ 
+To get a a proper wasm service I deployed the app to Netlify, whith several advantages:
+ - it is free :-)
+ - it allows for effective wasm service
+ - it has a simple continous deployment mechanism (through github)
+- it allows me to use a subdomain of my own domain : in this case wasmzidian.eludev.fr, which points to wasm-chinesewriter.netlify.app/
+
+Watch live at [https://wasmzidian.eludev.fr/](https://wasmzidian.eludev.fr/)

@@ -40,7 +40,7 @@ pub fn getpyform() -> String {
 	"##;
     String::from(form)
 } // autofocus does not work, will generate warning in console, see index.js l.53
-
+// 'required' makes sure that the input field is tested for validity before submit
 #[wasm_bindgen]
 pub fn getziform() -> String {
     let form = r##"
@@ -101,24 +101,23 @@ pub fn connectpyform() -> Result<(), JsValue> {
         .get_element_by_id("pyinput")
         .unwrap()
         .dyn_into::<HtmlFormElement>()?;
-    let form_ref = form.clone(); // will be moved in the closure
+    let form_ref = form.clone(); // will be moved into the closure
 
     let closure = Closure::<dyn FnMut(Event)>::once(move |event: Event| {
         event.prevent_default(); // stop page reload
-        let input_res = &form_ref
+        let input = &form_ref
             .get_with_name("pinyin_ton")
             .unwrap()
-            .dyn_into::<HtmlInputElement>();
-        if let Ok(input) = input_res {
-            if !input.check_validity() {
-                // performs the Html checks included in the form (line 36 hereabove)
-                input.report_validity();
-                return;
-            }
-            let binding = input.value();
-            let pinyin = binding.as_str();
-            ziprinter(pinyin, dbase::pylist(pinyin));
+            .dyn_into::<HtmlInputElement>()
+            .unwrap();
+        if !input.check_validity() {
+            // performs the Html checks included in the form (line 36 hereabove)
+            input.report_validity();
+            return;
         }
+        let binding = input.value();
+        let pinyin = binding.as_str();
+        ziprinter(pinyin, dbase::pylist(pinyin));
     });
 
     form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;
@@ -185,6 +184,7 @@ pub fn connectstrokeform() -> Result<(), JsValue> {
             .unwrap();
         if !input.check_validity() {
             // check that input is a number between 1 and 30 (line 62 hereabove)
+            console::log_1(&"in strokeform validity control".into()); // should never print
             input.report_validity();
             return;
         }
@@ -192,7 +192,7 @@ pub fn connectstrokeform() -> Result<(), JsValue> {
         let binding = input.value();
         let carac = binding.as_str();
         console::log_1(&format!("Stroke number :{}", input.value()).into());
-        let nbstroke: i64 = carac.parse().unwrap(); // we checked numeric validity line 166
+        let nbstroke: i64 = carac.parse().unwrap(); // we checked number in form validation
         let mess = format!("Characters with {} strokes", nbstroke);
         ziprinter(&mess, dbase::strokelist(nbstroke));
     });
