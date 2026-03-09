@@ -9,6 +9,8 @@ import init, {
   connectstrokeform,
   whz,
   connectwhzform,
+  getparseform,
+  connectparseform,
   listdic,
 } from "../pkg/wasmzidian.js";
 
@@ -35,6 +37,9 @@ async function run() {
   document
     .getElementById("writehanzi")
     .addEventListener("click", (ev) => printwhz());
+  document
+    .getElementById("parsestring")
+    .addEventListener("click", (ev) => printparseform());
 }
 
 run();
@@ -87,4 +92,13 @@ function printwhz() {
   connectwhzform(); // back to wasm for form submit callback
   document.getElementById("pinyin").focus(); // autofocus is not working, but this works
   document.body.removeEventListener("keydown", esckey); // esckey defined in chinesewriter.js
+}
+
+function printparseform() {
+  let container = document.getElementById("content");
+  container.innerHTML = getparseform();
+  connectparseform(); // back to wasm for form submit callback
+  document.getElementById("zistr").focus(); // autofocus is not working, but this works
+  document.getElementById("cancel").addEventListener("click", cancel);
+  document.body.addEventListener("keydown", esckey); // esckey defined in chinesewriter.js
 }

@@ -35,10 +35,14 @@ All available examples use "closure.forget()", which means some memory gets allo
 
 ## Deployment 
 
+Apparently there are no more constraints for wasm on the browser (client) side. But there still remain issues on the server side.
+
 When I deploy on my usual hosting provider it works, but on the console I get a message `WebAssembly.instantiateStreaming` failed because your server does not serve Wasm with `application/wasm` MIME type. Falling back to `WebAssembly.instantiate` which is slower. Original error:
  TypeError: Failed to execute 'compile' on 'WebAssembly': Incorrect response MIME type. Expected 'application/wasm'.
  
-I suppose this is still the case with many hosting providers.
+Try it on [https://eludev.fr/wasmzidian/](https://eludev.fr/wasmzidian/)
+ 
+I suppose this is still unfortunately the case with many hosting providers (mine is IONOS).
  
 To get a a proper wasm service I deployed the app to Netlify, whith several advantages:
  - it is free :-)
