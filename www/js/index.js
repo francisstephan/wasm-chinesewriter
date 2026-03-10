@@ -47,7 +47,7 @@ run();
 function printsize() {
   document.body.removeEventListener("keydown", esckey); // esckey defined in chinesewriter.js
   let container = document.getElementById("content");
-  container.innerHTML = "Dictionary size : " + getsize() + " zi";
+  container.innerHTML = getsize();
 }
 
 function printpyform() {

@@ -9,8 +9,12 @@ pub struct Zi {
     pub sens: &'static str,
 }
 
-pub fn getsize() -> usize {
-    return data::ZIDIAN.len();
+pub fn getsize() -> String {
+    return format!(
+        "Dictionary size: {} zi, last updated on {}",
+        data::ZIDIAN.len(),
+        data::TIME
+    );
 }
 
 pub fn pylist(pinyin: &str) -> Vec<Zi> {

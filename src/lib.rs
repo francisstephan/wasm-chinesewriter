@@ -20,7 +20,7 @@ thread_local! {  // https://www.sitepoint.com/rust-global-variables/
 }
 
 #[wasm_bindgen]
-pub fn getsize() -> usize {
+pub fn getsize() -> String {
     dbase::getsize()
 }
 
