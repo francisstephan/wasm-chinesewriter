@@ -19,7 +19,9 @@ pub fn pylist(pinyin: &str) -> Vec<Zi> {
 
     let mut vec = Vec::<Zi>::new();
     let n = data::ZIDIAN.len();
-    let mut i = 0;
+    let mut i = 0; // cannont use an iterator with data::ZIDIAN
+    // shows error: "ZIDIAN is not an iterator
+    // required for ZIDIAN to implement IntoIterator"
 
     while i < n {
         let dbzi = &data::ZIDIAN[i];

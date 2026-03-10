@@ -40,6 +40,7 @@ pub fn printcandidatelist(chain: &str) {
     cont.set_inner_html(&resp);
 }
 pub fn parseprinter(inputstring: &str) {
+    // A. Prepare parsing
     let chain = ammonia::clean(inputstring);
     let mut resp: String;
     resp = format!(
@@ -50,8 +51,9 @@ pub fn parseprinter(inputstring: &str) {
     let mut parsed = String::new();
     let mut unknown = Vec::<String>::new();
     let mut nonzi: bool = false;
+    // B. Parse chacracter by character:
     while let Some(carac) = chars.next() {
-        // 1. If carac is not a chinese character or is a punctuation mark, simply append it to parsed
+        // B1. If carac is not a chinese character or is a punctuation mark, simply append it to parsed
         if (carac as i64) < 0x2000
             || "。，“”（）、《》—；：！？「」 【】『』％‘’•".find(carac) != None
         {
@@ -63,10 +65,10 @@ pub fn parseprinter(inputstring: &str) {
             }
         } else {
             nonzi = false; // this is a zi: reset nonzi
-            // 2. get all pinyin for the carac character in the database
+            // B2. get all pinyin for the carac character in the database
             let disp = dbase::zilist(&carac.to_string());
             if disp.len() > 0 {
-                // 3. The character exists in the database: give all pinyin separated by /
+                // B3. The character exists in the database: give all pinyin separated by /
                 // parsed = format!("{}{}", parsed, " "); // simpler as follows:
                 parsed = format!("{} ", parsed); // insert space for better readability
                 for (i, py) in disp.iter().enumerate() {
@@ -76,22 +78,24 @@ pub fn parseprinter(inputstring: &str) {
                     parsed = format!("{}{}", parsed, py.pinyin_ton);
                 }
             } else {
-                // 4. The character is not in the base: add it to the unknown Vec
-                // 5. and append it as such (unparsed) to parsed
+                // B4. The character is not in the base: add it to the unknown Vec
+                // B5. and append it as such (unparsed) to parsed
                 unknown.push(carac.to_string());
                 parsed = format!("{} {}", parsed, carac);
             }
         }
     }
+    // 3 Display results (parsed and unknown)
     resp.push_str(&format!("<p>{}</p>", parsed));
     if unknown.len() == 0 {
         resp.push_str("<p>No unknown zi in input string</p>")
     } else {
-        resp.push_str("<p>The following zi are not in the database:</p>");
+        resp.push_str("<p>The following zi are not in the database:</p><ul>");
         for zi in unknown {
             resp.push_str(&format!("<li class='hanzi'>{}</li>", zi));
         }
     }
+    resp.push_str("</ul>");
     let cont = window()
         .unwrap()
         .document()
