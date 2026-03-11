@@ -22,6 +22,16 @@ python -m http.server --directory www 8080
 ```
 and point your browser to localhost:8080
 
+## Shortcut keys
+
+The Esc key is avaible when and only when a Cancel button is available, with the same effect : to cancel the currently active form.
+
+The Enter key is not managed by the program. When a form is active it fires form submission.
+
+The following keys: p (pinyin form), z (zi form) and s (string parser form), are available when and only when no form is active on the page. Consequently, they are not available in the "Write hanzi text" page.
+
+The shortcut keys are activated and deactivated in index.js, chinesewriter.js and lib.rs (wasm module).
+
 ## Development : using forms
 
 After working through the nobundle guide [no bundle version of the wasm-bindgen guide](https://nobundle.github.io/book/examples/wasm-bindgen_guide.html), especially examples 1.1, 1.4 and 1.5,

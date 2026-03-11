@@ -40,12 +40,17 @@ async function run() {
   document
     .getElementById("parsestring")
     .addEventListener("click", (ev) => printparseform());
+  minusesc_plusshort(); // initially:
+  // remove esc key event listener
+  // add p,z and s shortcut keys event listener
+  // (see https://github.com/francisstephan/wasm-chinesewriter/blob/main/README.md )
+  // defined in chinesewriter.js
 }
 
 run();
 
 function printsize() {
-  document.body.removeEventListener("keydown", esckey); // esckey defined in chinesewriter.js
+  minusesc_plusshort();
   let container = document.getElementById("content");
   container.innerHTML = getsize();
 }
@@ -57,7 +62,7 @@ function printpyform() {
   connectpyform(); // back to wasm for form submit callback
   document.getElementById("pinyin").focus(); // autofocus is not working, but this works
   document.getElementById("cancel").addEventListener("click", cancel);
-  document.body.addEventListener("keydown", esckey); // esckey defined in chinesewriter.js
+  plusesc_minusshort();
 }
 
 function printziform() {
@@ -67,7 +72,7 @@ function printziform() {
   connectziform(); // back to wasm for form submit callback
   document.getElementById("carac").focus(); // autofocus is not working, but this works
   document.getElementById("cancel").addEventListener("click", cancel);
-  document.body.addEventListener("keydown", esckey); // esckey defined in chinesewriter.js
+  plusesc_minusshort();
 }
 
 function printstrokeform() {
@@ -77,12 +82,12 @@ function printstrokeform() {
   connectstrokeform(); // back to wasm for form submit callback
   document.getElementById("stroke").focus(); // autofocus is not working, but this works
   document.getElementById("cancel").addEventListener("click", cancel);
-  document.body.addEventListener("keydown", esckey); // esckey defined in chinesewriter.js
+  plusesc_minusshort();
 }
 
 function printdic() {
   hidemenu("lists");
-  document.body.removeEventListener("keydown", esckey); // esckey defined in chinesewriter.js
+  minusesc_plusshort();
   listdic(); // in wasm, cf lib.rs line 27
 }
 
@@ -92,6 +97,7 @@ function printwhz() {
   connectwhzform(); // back to wasm for form submit callback
   document.getElementById("pinyin").focus(); // autofocus is not working, but this works
   document.body.removeEventListener("keydown", esckey); // esckey defined in chinesewriter.js
+  document.body.removeEventListener("keydown", shortkey);
 }
 
 function printparseform() {
@@ -100,5 +106,10 @@ function printparseform() {
   connectparseform(); // back to wasm for form submit callback
   document.getElementById("zistr").focus(); // autofocus is not working, but this works
   document.getElementById("cancel").addEventListener("click", cancel);
+  plusesc_minusshort();
+}
+
+function plusesc_minusshort() {
   document.body.addEventListener("keydown", esckey); // esckey defined in chinesewriter.js
+  document.body.removeEventListener("keydown", shortkey);
 }

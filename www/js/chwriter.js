@@ -22,7 +22,6 @@ function add(zi) {
   if (entree != null) entree.innerHTML = "";
   document.getElementById("pinyin").value = "";
   document.getElementById("pinyin").focus();
-  document.body.removeEventListener("keydown", esckey);
 }
 
 function copyTextToClipboard() {
@@ -69,11 +68,13 @@ function cancel() {
   // called from esckey (below) or from cancel button
   let container = document.getElementById("content");
   container.innerHTML = "Form canceled.";
+  minusesc_plusshort();
 }
 
 function esckey(e) {
   // esckey : Event listener to cancel form with Esc key
   if (e.keyCode == 27) cancel();
+  minusesc_plusshort();
 }
 
 function hidemenu(menu) {
@@ -85,4 +86,27 @@ function enablemenu(menu) {
   document.getElementById(menu).style.visibility = "visible";
   document.getElementById("getlists").style.backgroundColor = "green";
   document.getElementById("getlists").style.border = "2px solid palegreen";
+}
+
+function minusesc_plusshort() {
+  document.body.removeEventListener("keydown", esckey);
+  document.body.addEventListener("keydown", shortkey);
+}
+
+function shortkey(e) {
+  if (e.keyCode == 80) {
+    // key p : pinyin => zi
+    e.preventDefault();
+    document.getElementById("listforpy").click(); // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/click
+  }
+  if (e.keyCode == 90) {
+    // key z : zi => pinyin
+    e.preventDefault();
+    document.getElementById("listforzi").click();
+  }
+  if (e.keyCode == 83) {
+    // key s : string parser
+    e.preventDefault();
+    document.getElementById("parsestring").click();
+  }
 }

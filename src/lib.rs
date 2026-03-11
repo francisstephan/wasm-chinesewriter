@@ -20,6 +20,14 @@ thread_local! {  // https://www.sitepoint.com/rust-global-variables/
 }
 
 #[wasm_bindgen]
+extern "C" {
+    fn minusesc_plusshort(); // defined in chinesewriter.js
+    // remove esc key event listener
+    // add p,z and s shortcut keys event listener
+    // (see https://github.com/francisstephan/wasm-chinesewriter/blob/main/README.md )
+}
+
+#[wasm_bindgen]
 pub fn getsize() -> String {
     dbase::getsize()
 }
@@ -97,7 +105,7 @@ pub fn whz() -> String {
 #[wasm_bindgen]
 pub fn getparseform() -> String {
     let form = r##"
-	    <p id="formhead">Enter hanzi string to parse :</p>
+	    <h2 id="formhead">Enter hanzi string to parse :</h2>
         <form id="getparse" autocomplete="off" >
 		    <input id="zistr" name="zistr" type="text" required size="80" minlength="1" maxlength="400">
 		    <button class="menubouton" type="submit">Click to submit </button>
@@ -132,6 +140,7 @@ pub fn connectpyform() -> Result<(), JsValue> {
         let binding = input.value();
         let pinyin = binding.as_str();
         writers::ziprinter(pinyin, dbase::pylist(pinyin));
+        minusesc_plusshort(); // defined in chinesewriter.js
     });
 
     form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;
@@ -170,6 +179,7 @@ pub fn connectziform() -> Result<(), JsValue> {
         let binding = input.value();
         let carac = binding.as_str();
         writers::ziprinter(carac, dbase::zilist(carac));
+        minusesc_plusshort(); // defined in chinesewriter.js
     });
 
     form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;
@@ -209,6 +219,7 @@ pub fn connectstrokeform() -> Result<(), JsValue> {
         let nbstroke: i64 = carac.parse().unwrap(); // we checked number in form validation
         let mess = format!("Characters with {} strokes", nbstroke);
         writers::ziprinter(&mess, dbase::strokelist(nbstroke));
+        minusesc_plusshort(); // defined in chinesewriter.js
     });
 
     form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;
