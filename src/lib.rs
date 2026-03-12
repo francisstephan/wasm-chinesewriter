@@ -22,9 +22,11 @@ thread_local! {  // https://www.sitepoint.com/rust-global-variables/
 #[wasm_bindgen]
 extern "C" {
     fn minusesc_plusshort(); // defined in chinesewriter.js
+    // cannot be defined in module because of chosen file structure (www)
     // remove esc key event listener
     // add p,z and s shortcut keys event listener
     // (see https://github.com/francisstephan/wasm-chinesewriter/blob/main/README.md )
+    // and comments under minusesc_plusshort in chinesewriter.js
 }
 
 #[wasm_bindgen]

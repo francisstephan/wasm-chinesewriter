@@ -73,10 +73,7 @@ function cancel() {
 
 function esckey(e) {
   // esckey : Event listener to cancel form with Esc key
-  if (e.keyCode == 27) {
-    cancel();
-    minusesc_plusshort();
-  }
+  if (e.keyCode == 27) cancel();
 }
 
 function hidemenu(menu) {
@@ -90,26 +87,32 @@ function enablemenu(menu) {
   document.getElementById("getlists").style.border = "2px solid palegreen";
 }
 
-function minusesc_plusshort() {
-  document.body.removeEventListener("keydown", esckey);
-  document.body.addEventListener("keydown", shortkey);
-  // console.log("short activated");
-}
-
 function shortkey(e) {
   if (e.keyCode == 80) {
     // key p : pinyin => zi
-    e.preventDefault();
+    e.preventDefault(); // prevent transmission of p to input field
     document.getElementById("listforpy").click(); // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/click
   }
   if (e.keyCode == 90) {
     // key z : zi => pinyin
-    e.preventDefault();
+    e.preventDefault(); // prevent transmission of z to input field
     document.getElementById("listforzi").click();
   }
   if (e.keyCode == 83) {
     // key s : string parser
-    e.preventDefault();
+    e.preventDefault(); // prevent transmission of s to input field
     document.getElementById("parsestring").click();
   }
+}
+
+function minusesc_plusshort() {
+  // cannot be called from wasm if located in index.js,
+  // because of directory structure: the index.js module is not reachable from wasm,
+  // either at compile time if specified #[wasm_bindgen(module="../js/index.js")] extern "C" ...
+  //       (which would be okay at runtime)
+  // or a runtime if specified #[wasm_bindgen(module="/www/js/index.js")] extern "C" ...
+  //       (which is ok at compile time ...)
+  document.body.removeEventListener("keydown", esckey);
+  document.body.addEventListener("keydown", shortkey);
+  // console.log("short activated");
 }
