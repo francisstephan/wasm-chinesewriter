@@ -126,6 +126,8 @@ pub fn connectpyform() -> Result<(), JsValue> {
     let form_ref = form.clone(); // will be moved into the closure
 
     let closure = Closure::<dyn FnMut(Event)>::once(move |event: Event| {
+        console::log_1(&"in pyform callback closure".into());
+        console::log_1(&format!("event :{:?}", &event).into());
         event.prevent_default(); // stop page reload
         let input = &form_ref
             .get_with_name("pinyin_ton")

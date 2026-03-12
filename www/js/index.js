@@ -112,4 +112,5 @@ function printparseform() {
 function plusesc_minusshort() {
   document.body.addEventListener("keydown", esckey); // esckey defined in chinesewriter.js
   document.body.removeEventListener("keydown", shortkey);
+  // console.log("esc activated");
 }

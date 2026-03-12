@@ -73,8 +73,10 @@ function cancel() {
 
 function esckey(e) {
   // esckey : Event listener to cancel form with Esc key
-  if (e.keyCode == 27) cancel();
-  minusesc_plusshort();
+  if (e.keyCode == 27) {
+    cancel();
+    minusesc_plusshort();
+  }
 }
 
 function hidemenu(menu) {
@@ -91,6 +93,7 @@ function enablemenu(menu) {
 function minusesc_plusshort() {
   document.body.removeEventListener("keydown", esckey);
   document.body.addEventListener("keydown", shortkey);
+  // console.log("short activated");
 }
 
 function shortkey(e) {
