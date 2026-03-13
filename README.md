@@ -98,3 +98,6 @@ To get a a proper wasm service I deployed the app to Netlify, whith several adva
 - it allows me to use a subdomain of my own domain : in this case wasmzidian.eludev.fr, which points to wasm-chinesewriter.netlify.app/
 
 Watch live at [https://wasmzidian.eludev.fr/](https://wasmzidian.eludev.fr/)
+
+I also deployed to `codeberg`, where it works like a charm:
+[https://francisstephan.codeberg.page/](https://francisstephan.codeberg.page/)
