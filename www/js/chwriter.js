@@ -104,7 +104,6 @@ function shortkey(e) {
     document.getElementById("parsestring").click();
   }
 }
-
 function minusesc_plusshort() {
   // cannot be called from wasm if located in index.js,
   // because of directory structure: the index.js module is not reachable from wasm,
