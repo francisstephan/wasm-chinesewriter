@@ -295,6 +295,7 @@ pub fn connectparseform() -> Result<(), JsValue> {
         let binding = input.value();
         let chain = binding.as_str();
         writers::parseprinter(chain);
+        minusesc_plusshort(); // defined in chinesewriter.js
     });
 
     form.add_event_listener_with_callback("submit", &closure.as_ref().unchecked_ref())?;
