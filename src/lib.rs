@@ -137,7 +137,7 @@ pub fn connectpyform() -> Result<(), JsValue> {
             .dyn_into::<HtmlInputElement>()
             .unwrap();
         if !input.check_validity() {
-            // performs the Html checks included in the form (line 36 hereabove)
+            // performs the Html checks included in the form (line 47 hereabove)
             input.report_validity();
             return;
         }
@@ -175,7 +175,7 @@ pub fn connectziform() -> Result<(), JsValue> {
             .dyn_into::<HtmlInputElement>()
             .unwrap();
         if !input.check_validity() {
-            // check that there is exactly one char (line 49 hereabove)
+            // check that there is exactly one char (line 60 hereabove)
             input.report_validity();
             return;
         }
@@ -211,7 +211,7 @@ pub fn connectstrokeform() -> Result<(), JsValue> {
             .dyn_into::<HtmlInputElement>()
             .unwrap();
         if !input.check_validity() {
-            // check that input is a number between 1 and 30 (line 62 hereabove)
+            // check that input is a number between 1 and 30 (line 73 hereabove)
             console::log_1(&"in strokeform validity control".into()); // should never print
             input.report_validity();
             return;
@@ -251,7 +251,7 @@ pub fn connectwhzform() -> Result<(), JsValue> {
             .dyn_into::<HtmlInputElement>()
             .unwrap();
         if !input.check_validity() {
-            // performs the Html checks included in the form (line 83 hereabove)
+            // performs the Html checks included in the form (line 94 hereabove)
             input.report_validity();
             return;
         }
@@ -288,7 +288,7 @@ pub fn connectparseform() -> Result<(), JsValue> {
             .dyn_into::<HtmlInputElement>()
             .unwrap();
         if !input.check_validity() {
-            // performs the Html checks included in the form (line 36 hereabove)
+            // performs the Html checks included in the form (line 112 hereabove)
             input.report_validity();
             return;
         }

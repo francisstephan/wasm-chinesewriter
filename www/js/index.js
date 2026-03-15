@@ -88,7 +88,7 @@ function printstrokeform() {
 function printdic() {
   hidemenu("lists");
   minusesc_plusshort();
-  listdic(); // in wasm, cf lib.rs line 27
+  listdic(); // in wasm, cf lib.rs line 38
 }
 
 function printwhz() {
