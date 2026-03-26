@@ -44,7 +44,7 @@ pub fn parseprinter(inputstring: &str) {
     let chain = ammonia::clean(inputstring);
     let mut resp: String;
     resp = format!(
-        "<p>Input string:</p><p class='hanzi'>{}</p><p>Parsed string:</p>",
+        "<p>Input string:</p><p id='zistr' class='hanzi'>{}</p><p>Parsed string:</p>",
         chain
     );
     let mut chars = chain.chars();
@@ -86,7 +86,7 @@ pub fn parseprinter(inputstring: &str) {
         }
     }
     // 3 Display results (parsed and unknown)
-    resp.push_str(&format!("<p>{}</p>", parsed));
+    resp.push_str(&format!("<p id='parsed'>{}</p>", parsed));
     if unknown.len() == 0 {
         resp.push_str("<p>No unknown zi in input string</p>")
     } else {
@@ -96,6 +96,9 @@ pub fn parseprinter(inputstring: &str) {
         }
     }
     resp.push_str("</ul>");
+    resp.push_str(r##"
+        <button class = 'Addzi' onclick="lookup(document.getElementById('zistr').innerHTML)" >Google Translate text</button>
+        "##);
     let cont = window()
         .unwrap()
         .document()
