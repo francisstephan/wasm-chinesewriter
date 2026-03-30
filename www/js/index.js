@@ -96,8 +96,7 @@ function printwhz() {
   container.innerHTML = whz();
   connectwhzform(); // back to wasm for form submit callback
   document.getElementById("pinyin").focus(); // autofocus is not working, but this works
-  document.body.removeEventListener("keydown", esckey); // esckey defined in chinesewriter.js
-  document.body.removeEventListener("keydown", shortkey);
+  plusesc_minusshort();
 }
 
 function printparseform() {

@@ -103,6 +103,11 @@ function shortkey(e) {
     e.preventDefault(); // prevent transmission of s to input field
     document.getElementById("parsestring").click();
   }
+  if (e.keyCode == 87) {
+    // key s : string parser
+    e.preventDefault(); // prevent transmission of w to input field
+    document.getElementById("writehanzi").click();
+  }
 }
 function minusesc_plusshort() {
   // cannot be called from wasm if located in index.js,
