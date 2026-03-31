@@ -65,7 +65,7 @@ The Esc key is avaible when and only when a Cancel button is available, with the
 
 The Enter key is not managed by the program. When a form is active it fires form submission.
 
-The following keys: p (pinyin form), z (zi form) and s (string parser form), are available when and only when no form is active on the page. Consequently, they are not available in the "Write hanzi text" page.
+The following keys: p (pinyin form), z (zi form), s (string parser form) and w (write hanzi text), are available when and only when no form is active on the page. For instance, they are not available in the "Write hanzi text" page.
 
 The shortcut keys are activated and deactivated in index.js, chinesewriter.js and lib.rs (wasm module).
 
