@@ -46,7 +46,7 @@ pub fn pylist(pinyin: &str) -> Vec<Zi> {
         }
         i += 1;
     }
-    vec.sort();
+    vec.sort(); // https://rust-lang-nursery.github.io/rust-cookbook/algorithms/sorting.html
     vec
 }
 
