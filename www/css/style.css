@@ -3,6 +3,7 @@ body {
     padding: 0;
     margin: 0;
     font-family: Verdana, Geneva, sans-serif;
+    font-size: 16px;
 }
 
 #header {
@@ -58,7 +59,7 @@ ul.navig li {
     height: 22px;
     padding: 4px 10px 0 10px;
     color: white;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
 }
@@ -103,7 +104,7 @@ h1.title {
     padding-top: 80px;
 }
 h2 {
-    font-size: 24px;
+    font-size: 20px;
 }
 
 #layout-wrapper {
@@ -145,7 +146,7 @@ td {
     padding-left: 4px;
     padding-right: 4px;
     text-align: center;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 td.stc {
@@ -184,7 +185,6 @@ input:valid {
     color: white;
     padding: 10px 0 0 100px;
     font-size: 16px;
-    font-weight: bold;
 }
 
 #footer a {
