@@ -1,5 +1,6 @@
 // www/js/index.js
 import init, {
+  getindex,
   getsize,
   getpyform,
   connectpyform,
@@ -19,6 +20,9 @@ async function run() {
 
   // necessary because index.js will be loaded as a wasm module;
   // directly attaching printsize() to the button in index.html does not work:
+  document
+    .getElementById("logo")
+    .addEventListener("click", (ev) => printindex());
   document
     .getElementById("getsize")
     .addEventListener("click", (ev) => printsize());
@@ -48,6 +52,12 @@ async function run() {
 }
 
 run();
+
+function printindex() {
+  minusesc_plusshort();
+  let container = document.getElementById("content");
+  container.innerHTML = getindex();
+}
 
 function printsize() {
   minusesc_plusshort();

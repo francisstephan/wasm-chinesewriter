@@ -30,6 +30,24 @@ extern "C" {
 }
 
 #[wasm_bindgen]
+pub fn getindex() -> String {
+    let index = r##"
+        <h2>Select a menu item hereabove to get started</h2>
+        <p>The main menu entry is "Write hanzi text", which provides a way to enter chinese characters based on pinyin
+          (拼音汉子输入法). The chinese text you get can be copied to clipboard or sent to Google Translate.</p>
+        <p>Other commands allow you to query the dictionary : size, get pinyin from character,
+          get characters from pinyin, etc.</p>
+        <p>Finally, you may enter a whole string of chinese characters and get its pinyin equivalent,
+          under the command "Parse zi string"</p>
+        <p>Shortcut keys are available: p to get zi from pinyin, z to get pinyin from zi, w to write hanzi text,
+            s to parse a string of hanzi, and esc to cancel a form</p>
+        <p>The dictionary is included in the wasm module, so that once the page is loaded
+          you no longer need an internet connexion, at least until you reload the page</p>
+        "##;
+    String::from(index)
+}
+
+#[wasm_bindgen]
 pub fn getsize() -> String {
     dbase::getsize()
 }
