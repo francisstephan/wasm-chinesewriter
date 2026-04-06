@@ -41,7 +41,7 @@ pub fn printcandidatelist(chain: &str) {
 }
 pub fn parseprinter(inputstring: &str) {
     // A. Prepare parsing
-    let chain = ammonia::clean(inputstring);
+    let chain = ammonia::clean(inputstring); // strips any html / javascript tags
     let mut resp: String;
     resp = format!(
         "<p>Input string:</p><p id='zistr' class='hanzi'>{}</p><p>Parsed string:</p>",
@@ -85,7 +85,7 @@ pub fn parseprinter(inputstring: &str) {
             }
         }
     }
-    // 3 Display results (parsed and unknown)
+    // C Display results (parsed and unknown)
     resp.push_str(&format!("<p id='parsed'>{}</p>", parsed));
     if unknown.len() == 0 {
         resp.push_str("<p>No unknown zi in input string</p>")

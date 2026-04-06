@@ -293,8 +293,8 @@ pub fn connectparseform() -> Result<(), JsValue> {
             return;
         }
         let binding = input.value();
-        let chain = ammonia::clean(binding.as_str());
-        writers::parseprinter(&chain);
+        // let chain = ammonia::clean(binding.as_str()); // will be done in writers.rs
+        writers::parseprinter(&binding);
         minusesc_plusshort(); // defined in chinesewriter.js
     });
 
