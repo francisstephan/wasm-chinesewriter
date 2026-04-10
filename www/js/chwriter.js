@@ -104,7 +104,7 @@ function shortkey(e) {
     document.getElementById("parsestring").click();
   }
   if (e.keyCode == 87) {
-    // key s : string parser
+    // key w : chinese writer
     e.preventDefault(); // prevent transmission of w to input field
     document.getElementById("writehanzi").click();
   }

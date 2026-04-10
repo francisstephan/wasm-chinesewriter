@@ -46,7 +46,7 @@ async function run() {
     .addEventListener("click", (ev) => printparseform());
   minusesc_plusshort(); // initially:
   // remove esc key event listener
-  // add p,z and s shortcut keys event listener
+  // add p, z, s and w shortcut keys event listener
   // (see https://github.com/francisstephan/wasm-chinesewriter/blob/main/README.md )
   // defined in chinesewriter.js
 }
