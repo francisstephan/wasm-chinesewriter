@@ -24,6 +24,17 @@ body {
     cursor: pointer;
 }
 
+[data-tooltip]:hover::after {
+    display: block;
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    content: attr(data-tooltip);
+    border: 1px solid palegreen;
+    background: green;
+    padding: 0.1em;
+}
+
 #nav {
     position: absolute;
     top: 12px;
