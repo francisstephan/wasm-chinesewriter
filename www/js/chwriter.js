@@ -49,7 +49,13 @@ function lookup(text) {
 }
 
 function lookupWrittenChinese(text) {
-  var url = "https://hanzii.net/search/word/" + text + "?hl=en";
+  var url;
+  if (text.length > 1) {
+    url = "https://hanzii.net/search/word/" + text + "?hl=en";
+  }
+  else {
+    url = "https://hanzii.net/search/kanji/" + text + "?hl=en";
+  }
   window.open(url);
   var elem = document.getElementById("pinyin");
   if (elem) elem.focus();
