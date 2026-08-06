@@ -55,7 +55,7 @@ pub fn parseprinter(inputstring: &str) {
     while let Some(carac) = chars.next() {
         // B1. If carac is not a chinese character or is a punctuation mark, simply append it to parsed
         if (carac as i64) < 0x2000
-            || "。，“”（）、《》—；：！？「」 【】『』％‘’•".find(carac) != None
+            || "。，“”（）、《》—；：！？「」 【】『』％‘’•…".find(carac) != None
         {
             if nonzi {
                 parsed = format!("{}{}", parsed, carac)
